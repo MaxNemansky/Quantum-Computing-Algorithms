@@ -6,12 +6,15 @@ import numpy as np
 
 def QFT(circuit : QuantumCircuit, n_qubits):
     for i in range(n_qubits-1, -1, -1):
+        # Hadamardova brána, iterativně od posledního qubitu
         circuit.h(i)
 
+        # Iterativní užití kontrolovaného fázového posunu
         for j in range(i-1, -1, -1):
             phi = (np.pi /(2**(i-j)))
             circuit.cp(phi, j, i)
-    
+
+    # Finální SWAP qubitu
     for i in range(n_qubits // 2):
         circuit.swap(i, n_qubits-1 -i)
     
@@ -19,7 +22,7 @@ def QFT(circuit : QuantumCircuit, n_qubits):
 
 
 
-
+# Testovací kód pro řadu 0,4,8,12 na 16 qubitech
 if __name__ == "__main__":
     n_qubits = 4
     circuit = QuantumCircuit(n_qubits)
