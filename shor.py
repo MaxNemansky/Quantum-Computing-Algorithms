@@ -4,6 +4,7 @@ from qiskit.compiler.transpiler import transpile
 from qiskit.circuit import Gate
 from qiskit_aer import Aer
 from qiskit.visualization import plot_histogram
+import matplotlib.pyplot as plt
 from qft import QFT
 import random
 from math import gcd, ceil
@@ -146,6 +147,10 @@ def shor(N):
     # Překlad výsledků z binární soustavy do desítkové
     measured_vals = [int(bitstr, 2) for bitstr in counts.keys()]
     print("Výsledky měření simulací (desítkově):", measured_vals)
+    dec_counts = {str(int(bitstr, 2)): count
+              for bitstr, count in counts.items()}
+    plot_histogram(dec_counts, sort='value_desc')
+
     
     # Klasické operace pro extrakci periody r
     r = extract_period_from_measurements(measured_vals, n_exponent, a, N)
@@ -164,8 +169,9 @@ def shor(N):
     return measured_vals, factor1, factor2
 
 if __name__ == "__main__":
-    N = 21
+    N = 15
     results = shor(N)
     print("\Výsledek:")
     print("Naměřené hodnoty (desítkově), kandidát na rozklad 1, kandidát na rozklad 2:")
     print(results)
+    plt.show(block=True)
